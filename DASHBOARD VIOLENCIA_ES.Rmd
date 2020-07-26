@@ -139,7 +139,7 @@ datos2 <- read.csv(file="Total por anio_ES.csv",sep=";")
 datos3 <- read.csv(file="DATOS_ES.csv",sep=";")
 ```
 
-### Gráfica 1: Total de casos reportados por ciudades en los primeros 5 meses de 2018, 2019 y 2020.
+### Gráfica 1: Total de casos de violencia de género reportados por provincias en los primeros 5 meses de 2018, 2019 y 2020.
 
 Todos los datos han sido extraídos del sistema [Viogén](http://www.interior.gob.es/web/servicios-al-ciudadano/violencia-contra-la-mujer/estadisticas/).
 
@@ -155,22 +155,10 @@ fig
 ```
 
 ***
-Ciudades en las que aumenta el número de casos con respecto a 2019 también con respecto a 2018:
-- Álava
-- Asturias
-- Barcelona
-- Castellón
-- Girona
-- Guipúzcoa
-- Huesca
-- Jaén
-- Lleida
-- Santa Cruz de Tenerife
-- Tarragona
-- Toledo
+Provincias en las que aumenta el número de casos con respecto a 2019 y a 2018: todas las catalanas (Barcelona, Girona, Lleida y Tarragona) y Álava, Asturias, Castellón, Guipúzcoa, Huesca, Jaén, Santa Cruz de Tenerife y Toledo.
 
 
-### Gráfica 3: Casos reportados por violencia intrafamiliar por año y ciudad
+### Gráfica 3: Casos reportados por violencia intrafamiliar por año y provincia
 
 ```{r}
 
@@ -185,7 +173,7 @@ fig3
 En España, en general ha descendido la violencia de género.
 
 
-### Mapa: Casos totales por municipios en 2020
+### Mapa: Casos totales por provincias en 2020
 
 ```{r}
 Col<- leaflet() %>%
@@ -350,7 +338,7 @@ Col
 ```
 
 *** 
-En este mapa se puede observar el número de casos totales de violencia de género reportados por cada una de las capitales de provincia del país. La información que se muestra correspodnde a los meses de enero, febrero, marzo, abril y mayo de 2020.
+En este mapa se puede observar el número de casos totales de violencia de género reportados por cada provincia. La información que se muestra correspodnde a los meses de enero, febrero, marzo, abril y mayo de 2020.
 
 
 
