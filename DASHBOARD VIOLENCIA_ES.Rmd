@@ -1,0 +1,357 @@
+---
+title: "VIOLENCIA DE GÉNERO EN ESPAÑA"
+output: 
+  flexdashboard::flex_dashboard:
+     storyboard: true
+     theme: united
+     logo: R-LadiesGlobal_RBG_online_LogoWithText_Horizontal - copia.png 
+     social: ["twitter","instagram"]
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(leaflet.extras)
+library(leaflet)
+library(dplyr)
+library(sp)
+library(dplyr)
+library(tibble)
+library(readr)
+library(tidyr)
+library(ggplot2)
+library(gganimate)
+library(ggsci)
+library(gifski)
+library(plotly)
+datos <- read.csv("datosviolencia_ES.csv",sep = ";")
+attach(datos)
+#Andalucia#
+ANDALUCIA<- datos %>%
+  filter(COMUNIDAD == "Andalucia") %>%
+  group_by(COMUNIDAD)%>%mutate(color1=2*log(CANTIDAD))
+ attach(ANDALUCIA)
+
+#Aragon#
+ARAGON<- datos %>%
+  filter(COMUNIDAD == "Aragon") %>%
+  group_by(COMUNIDAD)%>%mutate(color2=2*log(CANTIDAD)) 
+attach(ARAGON)
+
+#Asturias#
+ASTURIAS<- datos %>%
+  filter(COMUNIDAD == "Asturias") %>%
+  group_by(COMUNIDAD)%>%mutate(color3=2*log(CANTIDAD))
+attach(ASTURIAS)
+
+#Canarias#
+CANARIAS<- datos %>%
+  filter(COMUNIDAD == "Canarias") %>%
+  group_by(COMUNIDAD)%>%mutate(color4=2*log(CANTIDAD)) 
+attach(CANARIAS)
+
+#Cantabria#
+CANTABRIA<- datos %>%
+  filter(COMUNIDAD == "Cantabria") %>%
+  group_by(COMUNIDAD) %>%mutate(color5=2*log(CANTIDAD))
+attach(CANTABRIA)
+
+#Castilla La Mancha#
+MANCHA<- datos %>%
+  filter(COMUNIDAD == "Castilla La Mancha") %>%
+  group_by(COMUNIDAD)%>%mutate(color6=2*log(CANTIDAD))
+attach(MANCHA)
+
+#Castilla Leon#
+LEON<- datos %>%
+  filter(COMUNIDAD == "Castilla Leon") %>%
+  group_by(COMUNIDAD)%>%mutate(color7=2*log(CANTIDAD))
+attach(LEON)
+
+#Catalunya#
+CATALUNYA<- datos %>%
+  filter(COMUNIDAD == "Catalunya") %>%
+  group_by(COMUNIDAD)%>%mutate(color8=2*log(CANTIDAD))
+attach(CATALUNYA)
+
+#Ceuta y Melilla#
+CEUTA<- datos %>%
+  filter(COMUNIDAD == "Ceuta y Melilla") %>%
+  group_by(COMUNIDAD)%>%mutate(color9=2*log(CANTIDAD))
+attach(CEUTA)
+
+#Extremadura#
+EXTREMADURA<- datos %>%
+  filter(COMUNIDAD == "Extremadura") %>%
+  group_by(COMUNIDAD)%>%mutate(color10=2*log(CANTIDAD))
+attach(EXTREMADURA)
+
+#Galicia#
+GALICIA<- datos %>%
+  filter(COMUNIDAD == "Galicia") %>%
+  group_by(COMUNIDAD)%>%mutate(color11=2*log(CANTIDAD)) 
+attach(GALICIA)
+
+#Islas Baleares#
+BALEARES<- datos %>%
+  filter(COMUNIDAD == "Islas Baleares") %>%
+  group_by(COMUNIDAD)%>%mutate(color12=2*log(CANTIDAD)) 
+attach(BALEARES)
+
+#La Rioja#
+RIOJA<- datos %>%
+  filter(COMUNIDAD == "La Rioja") %>%
+  group_by(COMUNIDAD)%>%mutate(color13=2*log(CANTIDAD)) 
+attach(RIOJA)
+
+#Madrid#
+MADRID<- datos %>%
+  filter(COMUNIDAD == "Madrid") %>%
+  group_by(COMUNIDAD)%>%mutate(color14=2*log(CANTIDAD)) 
+attach(MADRID)
+
+#Murcia#
+MURCIA<- datos %>%
+  filter(COMUNIDAD == "Murcia") %>%
+  group_by(COMUNIDAD)%>%mutate(color15=2*log(CANTIDAD)) 
+attach(MURCIA)
+
+#Navarra#
+NAVARRA<- datos %>%
+  filter(COMUNIDAD == "Navarra") %>%
+  group_by(COMUNIDAD)%>%mutate(color16=2*log(CANTIDAD)) 
+attach(NAVARRA)
+
+#Pais Vasco#
+VASCO<- datos %>%
+  filter(COMUNIDAD == "Pais Vasco") %>%
+  group_by(COMUNIDAD)%>%mutate(color17=2*log(CANTIDAD)) 
+attach(VASCO)
+
+#Valencia#
+VALENCIA<- datos %>%
+  filter(COMUNIDAD == "Valencia") %>%
+  group_by(COMUNIDAD)%>%mutate(color18=2*log(CANTIDAD)) 
+attach(VALENCIA)
+
+
+
+datos2 <- read.csv(file="Total por anio_ES.csv",sep=";")
+datos3 <- read.csv(file="DATOS_ES.csv",sep=";")
+```
+
+### Gráfica 1: Total de casos reportados por ciudades en los primeros 5 meses de 2018, 2019 y 2020.
+
+Todos los datos han sido extraídos del sistema [Viogén](http://www.interior.gob.es/web/servicios-al-ciudadano/violencia-contra-la-mujer/estadisticas/).
+
+```{r}
+
+fig <- plot_ly(datos2, x = ~CIUDAD, y = ~TOTAL.2018, type = 'bar', name = 'Total 2018')
+fig <- fig %>% add_trace(y = ~TOTAL.2019, name = 'Total 2019')
+fig <- fig %>% add_trace(y = ~TOTAL.2020, name = 'Total 2020')
+fig <- fig %>% layout(yaxis = list(title = 'Casos totales',type = "log"), barmode = 'stack',
+                      hovermode = "compare")
+fig
+
+```
+
+***
+Ciudades en las que aumenta el número de casos con respecto a 2019 también con respecto a 2018:
+- Álava
+- Asturias
+- Barcelona
+- Castellón
+- Girona
+- Guipúzcoa
+- Huesca
+- Jaén
+- Lleida
+- Santa Cruz de Tenerife
+- Tarragona
+- Toledo
+
+
+### Gráfica 3: Casos reportados por violencia intrafamiliar por año y ciudad
+
+```{r}
+
+p <- ggplot(datos3, aes(YEAR, CANTIDAD, color = CIUDAD, shape=MES)) +
+  geom_point(aes(size = CANTIDAD, frame = YEAR)) +
+  scale_y_log10()
+fig3 <- ggplotly(p,tooltip = "all")
+fig3
+```
+
+
+En España, en general ha descendido la violencia de género.
+
+
+### Mapa: Casos totales por municipios en 2020
+
+```{r}
+Col<- leaflet() %>%
+  addProviderTiles("OpenStreetMap.HOT")%>%
+    addCircleMarkers( data = ANDALUCIA, color= "blueviolet", radius = ~color1, lat = ANDALUCIA$Lat, lng = ANDALUCIA$Lon, 
+                    popup = paste0("<b>Nombre del municipio:", 
+                                   "</b>",
+                                   ANDALUCIA$MUNICIPIO,
+                                   "<br/>", 
+                                   "<b>Cantidad:", 
+                                   "</b>",
+                                   ANDALUCIA$CANTIDAD), group = "Andalucia",clusterOptions = markerClusterOptions()) %>%
+    addCircleMarkers(data = ARAGON, color="blueviolet",radius =~color2, lat = ARAGON$Lat, lng = ARAGON$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  ARAGON$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  ARAGON$CANTIDAD), group = "Aragon",clusterOptions = markerClusterOptions()) %>%
+
+  addCircleMarkers(data = ASTURIAS, color="blueviolet",radius =~color3, lat = ASTURIAS$Lat, lng = ASTURIAS$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  ASTURIAS$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  ASTURIAS$CANTIDAD), group = "Asturias",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = CANARIAS, color="blueviolet",radius =~color4, lat = CANARIAS$Lat, lng = CANARIAS$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  CANARIAS$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  CANARIAS$CANTIDAD), group = "Canarias",clusterOptions = markerClusterOptions()) %>%
+    addCircleMarkers(data = CANTABRIA, color="blueviolet",radius =~color5, lat = CANTABRIA$Lat, lng = CANTABRIA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  CANTABRIA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  CANTABRIA$CANTIDAD), group = "Cantabria",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = MANCHA, color="blueviolet",radius =~color6, lat = MANCHA$Lat, lng = MANCHA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  MANCHA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  MANCHA$CANTIDAD), group = "Castilla La Mancha",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = LEON, color="blueviolet",radius =~color7, lat = LEON$Lat, lng = LEON$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  LEON$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  LEON$CANTIDAD), group = "Castilla Leon",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = CATALUNYA, color="blueviolet",radius =~color8, lat = CATALUNYA$Lat, lng = CATALUNYA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  CATALUNYA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  CATALUNYA$CANTIDAD), group = "Catalunya",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = CEUTA, color="deepskyblue",radius =~color9, lat = CEUTA$Lat, lng = CEUTA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  CEUTA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  CEUTA$CANTIDAD), group = "Ceuta y Melilla",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = EXTREMADURA, color="deepskyblue",radius =~color10, lat = EXTREMADURA$Lat, lng = EXTREMADURA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  EXTREMADURA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  EXTREMADURA$CANTIDAD), group = "Extremadura",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = GALICIA, color="deepskyblue",radius =~color11, lat = GALICIA$Lat, lng = GALICIA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  GALICIA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  GALICIA$CANTIDAD), group = "Galicia",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = BALEARES, color="deepskyblue",radius =~color12, lat = BALEARES$Lat, lng = BALEARES$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  BALEARES$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  BALEARES$CANTIDAD), group = "Islas Baleares",clusterOptions = markerClusterOptions()) %>%
+    addCircleMarkers(data = RIOJA, color="deepskyblue",radius =~color13, lat = RIOJA$Lat, lng = RIOJA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  RIOJA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  RIOJA$CANTIDAD), group = "La Rioja",clusterOptions = markerClusterOptions()) %>% 
+  addCircleMarkers(data = MADRID, color="deepskyblue",radius =~color14, lat = MADRID$Lat, lng = MADRID$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  MADRID$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  MADRID$CANTIDAD), group = "Madrid",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = MURCIA, color="blue",radius =~color15, lat = MURCIA$Lat, lng = MURCIA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  MURCIA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  MURCIA$CANTIDAD), group = "Murcia",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = NAVARRA, color="blue",radius =~color16, lat = NAVARRA$Lat, lng = NAVARRA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  NAVARRA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  NAVARRA$CANTIDAD), group = "Navarra",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = VASCO, color="blue",radius =~color17, lat = VASCO$Lat, lng = VASCO$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  VASCO$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  VASCO$CANTIDAD), group = "Pais Vasco",clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(data = VALENCIA, color="blue",radius =~color18, lat = VALENCIA$Lat, lng = VALENCIA$Lon, 
+                   popup = paste0("<b>Nombre del municipio:", 
+                                  "</b>",
+                                  VALENCIA$MUNICIPIO,
+                                  "<br/>",
+                                  "<b>Cantidad:",
+                                  "</b>",
+                                  VALENCIA$CANTIDAD), group = "Valencia",clusterOptions = markerClusterOptions()) %>%
+     addDrawToolbar(targetGroup = 'datos',editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
+  addLayersControl(overlayGroups = c("Andalucia","Aragon","Asturias","Canarias","Cantabria",
+                                     "Castilla La Mancha","Castilla Leon","Catalunya",
+                                     "Ceuta y Melilla", "Extremadura", "Galicia","Islas Baleares",
+                                     "La Rioja","Madrid","Murcia","Navarra","Pais Vasco","Valencia")
+    )
+#Col%>%fitBounds(lng1 =-8.70 ,lat1 = -40.21,lng2 =-6.88 ,lat2 =180.58 )
+Col
+
+
+
+
+```
+
+*** 
+En este mapa se puede observar el número de casos totales de violencia de género reportados por cada una de las capitales de provincia del país. La información que se muestra correspodnde a los meses de enero, febrero, marzo, abril y mayo de 2020.
+
+
+
+
