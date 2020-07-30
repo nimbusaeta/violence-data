@@ -145,7 +145,7 @@ Todos los datos han sido extraídos del sistema [Viogén](http://www.interior.go
 
 ```{r}
 
-fig <- plot_ly(datos2, x = ~CIUDAD, y = ~TOTAL.2018, type = 'bar', name = 'Total 2018')
+fig <- plot_ly(datos2, x = ~PROVINCIA, y = ~TOTAL.2018, type = 'bar', name = 'Total 2018')
 fig <- fig %>% add_trace(y = ~TOTAL.2019, name = 'Total 2019')
 fig <- fig %>% add_trace(y = ~TOTAL.2020, name = 'Total 2020')
 fig <- fig %>% layout(yaxis = list(title = 'Casos totales',type = "log"), barmode = 'stack',
@@ -155,7 +155,7 @@ fig
 ```
 
 ***
-Provincias en las que aumenta el número de casos con respecto a 2019 y a 2018: todas las catalanas (Barcelona, Girona, Lleida y Tarragona) y Álava, Asturias, Castellón, Guipúzcoa, Huesca, Jaén, Santa Cruz de Tenerife y Toledo.
+Provincias en las que aumenta el número de casos con respecto a 2019 y a 2018: todas las catalanas (Barcelona, Girona, Lleida y Tarragona) y Álava, Asturias, Castellón, Guipúzcoa, Huesca, Jaén, Santa Cruz de Tenerife y Toledo. En total 12 provincias de un total de 52. Puede deberse a que algunas provincias entraron antes que otras en la fase 1 de la desescalada.
 
 
 ### Gráfica 3: Casos reportados por violencia intrafamiliar por año y provincia
